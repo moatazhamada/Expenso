@@ -71,7 +71,6 @@ dependencies {
     // Room
     implementation("androidx.room:room-runtime:2.8.3")
     ksp("androidx.room:room-compiler:2.8.3")
-    ksp("org.xerial:sqlite-jdbc:3.50.3.0")
 
     // Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:2.8.3")
