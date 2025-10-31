@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import dev.spikeysanju.expenso.view.account.AccountViewModel
 import dev.spikeysanju.expensetracker.R
 import dev.spikeysanju.expensetracker.databinding.FragmentAddTransactionBinding
 import dev.spikeysanju.expensetracker.model.Transaction
@@ -23,6 +25,8 @@ import java.util.*
 class AddTransactionFragment :
     BaseFragment<FragmentAddTransactionBinding, TransactionViewModel>() {
     override val viewModel: TransactionViewModel by activityViewModels()
+    private val accountViewModel: AccountViewModel by viewModels()
+    private var accountId = 0
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
@@ -47,6 +51,19 @@ class AddTransactionFragment :
             addTransactionLayout.etTransactionType.setAdapter(transactionTypeAdapter)
             addTransactionLayout.etTag.setAdapter(tagsAdapter)
 
+            accountViewModel.accounts.observe(viewLifecycleOwner) { accounts ->
+                val accountNames = accounts.map { it.name }
+                val accountAdapter = ArrayAdapter(
+                    requireContext(),
+                    R.layout.item_autocomplete_layout,
+                    accountNames
+                )
+                addTransactionLayout.etAccount.setAdapter(accountAdapter)
+                addTransactionLayout.etAccount.setOnItemClickListener { _, _, position, _ ->
+                    accountId = accounts[position].id
+                }
+            }
+
             // Transform TextInputEditText to DatePicker using Ext function
             addTransactionLayout.etWhen.transformIntoDatePicker(
                 requireContext(),
@@ -69,6 +86,9 @@ class AddTransactionFragment :
                         }
                         tag.isEmpty() -> {
                             this.etTag.error = "Tag must not be empty"
+                        }
+                        accountId == 0 -> {
+                            this.etAccount.error = "Account must not be empty"
                         }
                         date.isEmpty() -> {
                             this.etWhen.error = "Date must not be empty"
@@ -100,7 +120,7 @@ class AddTransactionFragment :
         val date = it.etWhen.text.toString()
         val note = it.etNote.text.toString()
 
-        return Transaction(title, amount, transactionType, tag, date, note)
+        return Transaction(title, amount, transactionType, tag, accountId, date, note)
     }
 
     override fun getViewBinding(

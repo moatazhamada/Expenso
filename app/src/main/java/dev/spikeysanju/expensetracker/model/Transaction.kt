@@ -17,6 +17,8 @@ data class Transaction(
     var transactionType: String,
     @ColumnInfo(name = "tag")
     var tag: String,
+    @ColumnInfo(name = "accountId")
+    var accountId: Int,
     @ColumnInfo(name = "date")
     var date: String,
     @ColumnInfo(name = "note")
