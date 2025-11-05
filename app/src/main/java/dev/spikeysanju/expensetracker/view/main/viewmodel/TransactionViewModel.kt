@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.spikeysanju.expensetracker.data.local.datastore.UIModeImpl
 import dev.spikeysanju.expensetracker.model.Transaction
+import dev.spikeysanju.expensetracker.repo.AccountRepository
 import dev.spikeysanju.expensetracker.repo.TransactionRepo
 import dev.spikeysanju.expensetracker.services.exportcsv.ExportCsvService
 import dev.spikeysanju.expensetracker.services.exportcsv.toCsv
@@ -28,6 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TransactionViewModel @Inject constructor(
     private val transactionRepo: TransactionRepo,
+    private val accountRepository: AccountRepository,
     private val exportService: ExportCsvService,
     private val uiModeDataStore: UIModeImpl
 ) : ViewModel() {
@@ -74,6 +76,15 @@ class TransactionViewModel @Inject constructor(
     // insert transaction
     fun insertTransaction(transaction: Transaction) = viewModelScope.launch {
         transactionRepo.insert(transaction)
+        val account = accountRepository.getAccountById(transaction.accountId)
+        if (account != null) {
+            val newBalance = if (transaction.transactionType == "Income") {
+                account.balance + transaction.amount
+            } else {
+                account.balance - transaction.amount
+            }
+            accountRepository.updateAccount(account.copy(balance = newBalance))
+        }
     }
 
     // update transaction
@@ -84,6 +95,15 @@ class TransactionViewModel @Inject constructor(
     // delete transaction
     fun deleteTransaction(transaction: Transaction) = viewModelScope.launch {
         transactionRepo.delete(transaction)
+        val account = accountRepository.getAccountById(transaction.accountId)
+        if (account != null) {
+            val newBalance = if (transaction.transactionType == "Income") {
+                account.balance - transaction.amount
+            } else {
+                account.balance + transaction.amount
+            }
+            accountRepository.updateAccount(account.copy(balance = newBalance))
+        }
     }
 
     // get all transaction

@@ -26,6 +26,7 @@ import dev.spikeysanju.expensetracker.databinding.FragmentTransactionDetailsBind
 import dev.spikeysanju.expensetracker.model.Transaction
 import dev.spikeysanju.expensetracker.utils.saveBitmap
 import dev.spikeysanju.expensetracker.utils.viewState.DetailState
+import dev.spikeysanju.expensetracker.view.account.AccountViewModel
 import dev.spikeysanju.expensetracker.view.base.BaseFragment
 import dev.spikeysanju.expensetracker.view.main.viewmodel.TransactionViewModel
 import hide
@@ -38,6 +39,7 @@ import snack
 class TransactionDetailsFragment : BaseFragment<FragmentTransactionDetailsBinding, TransactionViewModel>() {
     private val args: TransactionDetailsFragmentArgs by navArgs()
     override val viewModel: TransactionViewModel by activityViewModels()
+    private val accountViewModel: AccountViewModel by activityViewModels()
 
     // handle permission dialog
     private val requestLauncher =
@@ -99,6 +101,13 @@ class TransactionDetailsFragment : BaseFragment<FragmentTransactionDetailsBindin
         date.text = transaction.date
         note.text = transaction.note
         createdAt.text = transaction.createdAtDateFormat
+
+        accountViewModel.accounts.observe(viewLifecycleOwner) { accounts ->
+            val account = accounts.find { it.id == transaction.accountId }
+            if (account != null) {
+                this.account.text = account.name
+            }
+        }
 
         binding.editTransaction.setOnClickListener {
             val bundle = Bundle().apply {
