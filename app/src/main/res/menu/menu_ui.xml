@@ -22,6 +22,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_accounts"
+        android:enabled="true"
+        android:title="Accounts"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_export"
         android:enabled="true"
         android:title="@string/text_export_csv"

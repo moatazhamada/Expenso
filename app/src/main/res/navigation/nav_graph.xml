@@ -31,6 +31,47 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_accountFragment"
+            app:destination="@id/accountFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="dev.spikeysanju.expensetracker.view.account.AccountFragment"
+        android:label="Accounts"
+        tools:layout="@layout/fragment_account">
+        <action
+            android:id="@+id/action_accountFragment_to_addAccountFragment"
+            app:destination="@id/addAccountFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_accountFragment_to_editAccountFragment"
+            app:destination="@id/editAccountFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/addAccountFragment"
+        android:name="dev.spikeysanju.expensetracker.view.account.AddAccountFragment"
+        android:label="Add Account"
+        tools:layout="@layout/fragment_add_account" />
+    <fragment
+        android:id="@+id/editAccountFragment"
+        android:name="dev.spikeysanju.expensetracker.view.account.EditAccountFragment"
+        android:label="Edit Account"
+        tools:layout="@layout/fragment_edit_account">
+        <argument
+            android:name="account"
+            app:argType="dev.spikeysanju.expensetracker.model.Account" />
     </fragment>
     <fragment
         android:id="@+id/addTransactionFragment"

@@ -315,6 +315,11 @@ class DashboardFragment :
                 true
             }
 
+            R.id.action_accounts -> {
+                findNavController().navigate(R.id.action_dashboardFragment_to_accountFragment)
+                true
+            }
+
             R.id.action_export -> {
                 val csvFileName = "expenso_${System.currentTimeMillis()}"
                 csvCreateRequestLauncher.launch(csvFileName)
