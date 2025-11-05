@@ -24,4 +24,8 @@ class AccountRepository @Inject constructor(
     fun getAllAccounts(): Flow<List<Account>> {
         return accountDao.getAllAccounts()
     }
+
+    suspend fun getAccountById(id: Int): Account? {
+        return accountDao.getAccountById(id)
+    }
 }

@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import dev.spikeysanju.expensetracker.databinding.ItemAccountLayoutBinding
 import dev.spikeysanju.expensetracker.model.Account
 
-class AccountAdapter : ListAdapter<Account, AccountAdapter.AccountViewHolder>(AccountDiffCallback()) {
+class AccountAdapter(
+    private val onEditClick: (Account) -> Unit,
+    private val onDeleteClick: (Account) -> Unit
+) : ListAdapter<Account, AccountAdapter.AccountViewHolder>(AccountDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
         val binding =
@@ -27,6 +30,14 @@ class AccountAdapter : ListAdapter<Account, AccountAdapter.AccountViewHolder>(Ac
                 tvAccountName.text = account.name
                 tvAccountBalance.text = "₹${account.balance}"
                 tvAccountType.text = account.type
+
+                btnEditAccount.setOnClickListener {
+                    onEditClick(account)
+                }
+
+                btnDeleteAccount.setOnClickListener {
+                    onDeleteClick(account)
+                }
             }
         }
     }

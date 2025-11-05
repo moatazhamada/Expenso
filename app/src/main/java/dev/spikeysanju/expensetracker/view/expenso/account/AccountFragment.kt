@@ -20,7 +20,15 @@ class AccountFragment : Fragment() {
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AccountViewModel by viewModels()
-    private val accountAdapter = AccountAdapter()
+    private val accountAdapter = AccountAdapter(
+        onEditClick = { account ->
+            val action = AccountFragmentDirections.actionAccountFragmentToEditAccountFragment(account)
+            findNavController().navigate(action)
+        },
+        onDeleteClick = { account ->
+            viewModel.deleteAccount(account)
+        }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
